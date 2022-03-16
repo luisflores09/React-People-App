@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Index from "../pages/Index";
 import Show from "../pages/Show";
 
@@ -26,17 +26,46 @@ function Main(props) {
     getPeople();
   };
 
+  const updatePeople = async (person, id) => {
+    // make put request to create people
+    await fetch(URL + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(person),
+    });
+    getPeople();
+  };
+
+  const deletePeople = async (id) => {
+    // make delete request to create people
+    await fetch(URL + id, {
+      method: "DELETE",
+    });
+    getPeople();
+  };
+
   useEffect(() => getPeople(), []);
 
     return (
         <main>
-          <Routes>
-            <Route
-             exact path="/" 
-             element={<Index people={people} createPeople={createPeople}/>}
-             />
-            <Route path="/people/:id" element={(rp) => <Show {...rp} />} />
-          </Routes>
+          <Switch>
+            <Route exact path="/">
+              <Index people={people} createPeople={createPeople}/>
+            </Route>
+            <Route 
+            path="/people/:id" 
+            render={(ep) => (
+              <Show 
+                {...ep} 
+                people={people}
+                updatePeople={updatePeople}
+                deletePeople={deletePeople}
+              />
+              )} 
+              />
+          </Switch>
         </main>
       );
 }
