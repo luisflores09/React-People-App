@@ -24,11 +24,19 @@ function Show(props) {
     props.history.push("/");
   };
 
+  const removePerson = () => {
+    props.deletePeople(person._id);
+    props.history.push("/");
+  };
+
   return (
     <div className="person">
       <h1>{person.name}</h1>
       <h2>{person.title}</h2>
       <img src={person.image} alt={person.name} />
+      <button id="delete" onClick={removePerson}>
+        DELETE
+      </button>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
